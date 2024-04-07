@@ -27,14 +27,14 @@ public class BasketSplitter {
 
     public Map<String, List<String>> split(List<String> items) {
 
-        // filtrujemy żeby mieć tylko produkty, które są w koszyku
+        // filtering to get only these products which are in the basket
        Map<String, List<String>> filteredProducts = filterDeliveryOptions(deliveryOptions,items);
         Map<String, List<String>> resultDeliveries = new HashMap<>();
 
         while (!filteredProducts.isEmpty()) {
-            // Map(rodzaj dostawy, liczba wystąpień)
-            // wybieramy tą metodę dostawy, które wystepują dla większości produktów
-            // kontynuujemy aż lista produktów nie będzie pusta
+            // Map(delivery method, count)
+            // we choose the methos which applies for most of the products in the basket
+            // continue until the list is empy
             Map<String, Integer> deliveryFrequency = calculateDeliveryFrequency(filteredProducts);
             String mostCommonDelivery = findMostCommonDelivery(deliveryFrequency);
 
@@ -47,11 +47,10 @@ public class BasketSplitter {
                 }
             }
 
-            // Map(metoda dostawy, [lista produktów])
             resultDeliveries.put(mostCommonDelivery, assignedProducts);
         }
 
-        //sortujemy, by uzyskać wyniki od największej liczby produktów na rodzaj dostawy
+        //sorting
         return resultDeliveries.entrySet().stream()
                 .sorted((e1, e2) -> Integer.compare(e2.getValue().size(), e1.getValue().size()))
                 .collect(Collectors.toMap(
@@ -69,7 +68,6 @@ public class BasketSplitter {
     }
 
     Map<String, Integer> calculateDeliveryFrequency(Map<String, List<String>> products) {
-        //Map(rodzaj dostawy, liczba wystąpień)
         Map<String, Integer> frequency = new HashMap<>();
         for (List<String> deliveryOptions : products.values()) {
             for (String option : deliveryOptions) {
@@ -80,7 +78,6 @@ public class BasketSplitter {
     }
 
     String findMostCommonDelivery(Map<String, Integer> frequency) {
-        //wybieramy tą dostawę ,która ma najwiejszą liczbę wystąoień
         return frequency.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
