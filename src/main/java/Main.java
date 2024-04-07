@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            //ładowanie z pliku json
+            //loading json file
             File jsonFile = new File("C:\\Users\\weron\\IdeaProjects\\BasketSplitter\\src\\main\\java\\basket-1.json");
 
             List<String> basket = mapper.readValue(jsonFile, new TypeReference<List<String>>(){});
